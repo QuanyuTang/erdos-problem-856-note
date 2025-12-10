@@ -1,0 +1,700 @@
+\documentclass[11pt,letterpaper,reqno]{amsart}
+\usepackage{tikz}
+\usetikzlibrary{positioning, shapes.geometric, arrows.meta, calc, positioning}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amsfonts}
+\usepackage{mathtools}
+\usepackage{bbm}
+\usepackage{enumitem} 
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18} 
+\usepackage{booktabs}
+\usepackage{graphicx}
+\usepackage[T1]{fontenc}
+\usepackage{doi}
+\usepackage{float} 
+\addtolength{\hoffset}{-1.5cm}\addtolength{\textwidth}{3cm}
+\addtolength{\voffset}{-1cm}\addtolength{\textheight}{2cm}
+
+\usepackage{bookmark}
+\usepackage{hyperref}
+\hypersetup{pdfstartview={FitH}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\cE}{\mathcal{E}}
+\newcommand{\norm}[1]{\lVert #1 \rVert}
+\newcommand{\abs}[1]{| #1 |}
+\newcommand{\bv}{\mathbf{v}}
+\newcommand{\bw}{\mathbf{w}}
+\newcommand{\tr}{\operatorname{Tr}}
+\DeclareMathOperator{\rank}{rank}
+
+\newtheorem{thm}{Theorem}[section]
+\newtheorem{lem}[thm]{Lemma}
+\newtheorem{prop}[thm]{Proposition}
+\newtheorem{cor}[thm]{Corollary}
+\newtheorem{claim}{Claim}
+\newtheorem{ques}[thm]{Question}
+\newtheorem{prob}[thm]{Problem}
+\newtheorem{conj}[thm]{Conjecture}
+\theoremstyle{definition}
+\newtheorem{exm}[thm]{Example}
+\newtheorem{remark}[thm]{Remark}
+\newtheorem{defn}[thm]{Definition}
+\numberwithin{equation}{section}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\taufunc}{\tau}
+\newcommand{\omegap}{\omega}
+\newcommand{\ord}{\operatorname{ord}}
+\newcommand{\R}{\mathbb{R}}        % real numbers
+\newcommand{\E}{\mathbb{E}}        % expectation
+\newcommand{\Var}{\mathrm{Var}}    % variance
+\newcommand{\Cov}{\operatorname{Cov}}
+\newcommand{\PP}{\mathbb{P}}       % probability
+\newcommand{\eps}{\varepsilon}     % epsilon
+\newcommand{\ind}{\mathbf{1}}      % indicator function
+\newcommand{\seq}[1]{\left(#1\right)} % sequence
+\makeatother
+
+\begin{document}
+
+\title{A Note on Erd\H{o}s Problem~\#856}
+
+
+\author[Q.~Tang]{Quanyu Tang}
+\date{\today}
+
+\address{School of Mathematics and Statistics, Xi'an Jiaotong University, Xi'an 710049, P. R. China}
+\email{tang\_quanyu@163.com}
+
+% \subjclass[2020]{}
+
+% \keywords{}
+
+% \begin{abstract}
+
+% \end{abstract}
+
+\maketitle
+
+
+\section{Introduction}
+
+Let $k\ge 2$ and $N\ge 1$ be integers. Following Erd\H{o}s~\cite{Er70}, we are interested in
+the structure of subsets $A\subset\{1,\dots,N\}$ which avoid ``LCM patterns'' of
+size $k$. More precisely, we say that $A$ \emph{contains an LCM-$k$-tuple} if
+there exist distinct $a_1,\dots,a_k\in A$ such that all pairwise least common
+multiples coincide:
+\[
+\operatorname{lcm}(a_i,a_j) = \operatorname{lcm}(a_1,a_2)
+\qquad\text{for all }1\le i<j\le k.
+\]
+
+In~\cite[p.~124]{Er70}, Erd\H{o}s introduced the counting function
+$F(k,x)$, defined as the largest integer $s$ for which one can find
+\[
+1 \le a_1 < \cdots < a_s \le x
+\]
+with the property that no $k$ of the $a_i$ have pairwise equal least common
+multiple. He originally conjectured that $F(k,x)=o(x)$ for every $k\ge 3$, but
+later showed that this is false for $k\ge 4$, see~\cite[Theorem~1]{Er70}.
+In particular, for every $k\ge 4$ there exists $\delta_k>0$ such that
+\[
+F(k,x) \;\ge\; \delta_k x
+\]
+for all sufficiently large $x$.
+
+In the same paper, Erd\H{o}s also considered the \emph{harmonic} analogue of
+this problem. He showed in~\cite[Eq.~(19)]{Er70} that there is a constant $c_k>0$ such that, whenever
+$x$ is sufficiently large and $a_1<\dots<a_s\le x$ satisfy
+\begin{equation}\label{eq:Erdos-threshold}
+\sum_{i=1}^s \frac{1}{a_i} \;>\; c_k \log x,
+\end{equation}
+then there must exist $k$ of the $a_i$ which have pairwise equal least common
+multiple. 
+
+Motivated by this, it is natural to isolate the harmonic problem
+\[
+f_k(N)
+:= \max\Biggl\{\,\sum_{n\in A}\frac{1}{n} :
+A\subset\{1,\dots,N\}\ \text{contains no LCM--$k$-tuple}\,\Biggr\}.
+\]Erd\H{o}s' argument (see \cite[p.~127]{Er70}) shows that
+\[
+f_k(N) \;\ll_k\; \frac{\log N}{\log\log N}.
+\]
+However, very little is known about lower bounds for $f_k(N)$.
+
+
+The following problem appears as Problem~\#856 on Bloom’s Erd\H{o}s Problems website~\cite{EP856}.
+\begin{prob}
+Let $k\geq 3$ and $f_k(N)$ be the maximum value of $\sum_{n\in A}\frac{1}{n}$, where $A$ ranges over all subsets of $\{1,\ldots,N\}$ which contain no subset of size $k$ with the same pairwise least common multiple.
+
+Estimate $f_k(N)$.
+\end{prob}
+
+It is immediate from the definition that we have the monotonicity
+\[
+k\ge 3 \quad\Longrightarrow\quad f_k(N)\;\ge\; f_3(N).
+\]
+In the comments part of \cite{EP856}, Bloom observed that $f_3(N)\gg \log\log N$. A closer inspection of the same construction yields the stronger bound
+\[
+f_3(N)\;\gg_t\; (\log\log N)^t
+\quad\text{for every integer } t\ge1.
+\]
+Since the detailed proofs in the comment section are rather long, we have
+included complete versions of these arguments in the Appendix of this note.
+
+In this note we go significantly further and prove that
+\[
+f_3(N)\;\gg\; (\log N)^{\,1/e - o(1)}.
+\]
+
+
+
+
+\section{Main result}
+
+We recall that $f_3(N)$ denotes the maximum of
+\[
+\sum_{n\in A}\frac1n
+\]
+over all subsets $A\subset\{1,\dots,N\}$ which contain no triple
+$\{a,b,c\}$ of distinct elements with
+\[
+\operatorname{lcm}(a,b) = \operatorname{lcm}(a,c) = \operatorname{lcm}(b,c).
+\]
+
+\begin{thm}
+For every constant $0<c<1/e$, we have
+\[
+f_3(N) \gg_c (\log N)^c
+\]
+for all sufficiently large $N$.
+\end{thm}
+
+\begin{proof}
+Fix $c\in(0,1/e)$ and define
+\[
+g(\alpha) := \alpha\log\frac1\alpha,\qquad 0<\alpha<1.
+\]
+It is well known that $g$ attains its maximum $1/e$ at $\alpha=1/e$, and $g$ is continuous
+on $(0,1)$.  Hence we may choose $\alpha\in(0,1)$ such that
+\[
+g(\alpha) > c.
+\]
+Let $\varepsilon>0$ be such that
+\[
+g(\alpha) - 2\varepsilon > c.
+\]
+
+
+For each sufficiently large $N$, set
+\[
+L := \log\log N,\qquad t := \bigl\lfloor \alpha L\bigr\rfloor,
+\]
+so that $t\to\infty$ and $t = \alpha L + O(1)$, and define
+\[
+x := N^{1/t}.
+\]
+Then $x\to\infty$ as $N\to\infty$.  We also define \(P_0 := \lceil t^2\rceil\), and work with primes in the interval $[P_0,x]$.
+
+For $y\ge 2$, let
+\[
+H(y) := \sum_{p\le y}\frac1p
+\]
+denote the harmonic sum over primes $\le y$.  By Mertens' theorem,
+\[
+H(y) = \log\log y + M + O\!\Bigl(\frac1{\log y}\Bigr)
+\qquad(y\to\infty),
+\]
+for some absolute constant $M$.
+
+We first estimate $H(x)$.  Note that
+\[
+\log\log x
+= \log\Bigl(\frac{\log N}{t}\Bigr)
+= \log\log N - \log t
+= L - \log t.
+\]
+Since $t=\alpha L+O(1)$, we have $\log t = \log L + O(1)$ and hence
+\[
+\log\log x = L - \log L + O(1),
+\]
+so in particular
+\[
+H(x) = \log\log x + O(1) = L + O(\log L).
+\]
+
+Let
+\[
+H_{>P_0}(x) := \sum_{P_0\le p\le x}\frac1p = H(x) - H(P_0^-),
+\]
+where $H(P_0^-)=\sum_{p<P_0}1/p$.  By Mertens' theorem applied at $y=P_0$,
+\[
+H(P_0^-) = \log\log P_0 + O(1)
+= \log\log(t^2) + O(1)
+= \log\log t + O(1)
+= O(\log\log L),
+\]
+so
+\[
+H_{>P_0}(x)
+= L + O(\log L).
+\]
+Consequently,
+\begin{equation}\label{eq:Hratio}
+\frac{H_{>P_0}(x)}{t}
+= \frac{L + O(\log L)}{\alpha L + O(1)}
+= \frac1\alpha + O\Bigl(\frac{\log L}{L}\Bigr)
+= \frac1\alpha + o(1)
+\qquad(N\to\infty).
+\end{equation}
+
+
+List the primes in $[P_0,x]$ in increasing order as
+\[
+q_1 < q_2 < \dots < q_M \le x.
+\]
+We now partition $\{q_1,\dots,q_M\}$ into $t$ disjoint subsets
+$P_1,\dots,P_t$ by the following greedy algorithm.
+
+Initialize $P_i:=\varnothing$ and $S_i:=0$ for $1\le i\le t$.
+For $j=1,2,\dots,M$, having already assigned $q_1,\dots,q_{j-1}$ to some of the
+$P_i$, choose an index $i_j\in\{1,\dots,t\}$ such that $S_{i_j}$ is minimal,
+and put $q_j\in P_{i_j}$, updating $S_{i_j}\gets S_{i_j} + 1/q_j$.
+
+For each $i$ we write
+\[
+S_i(x) := \sum_{p\in P_i}\frac1p.
+\]
+We claim that for every $N$,
+\begin{equation}\label{eq:balance}
+\max_{1\le i\le t} S_i(x) - \min_{1\le i\le t} S_i(x) \;\le\; \frac1{P_0}.
+\end{equation}
+This is proved by induction on $j$.  Let $S_i^{(j)}$ denote the sums after
+the first $j$ primes have been assigned, and let $M_j:=\max_i S_i^{(j)}$,
+$m_j:=\min_i S_i^{(j)}$.  Initially $M_0=m_0=0$.  Suppose $M_{j-1}-m_{j-1}\le 1/P_0$.
+When we assign $q_j$ of weight $w_j=1/q_j\le 1/P_0$ to a bucket $i_j$ with
+$S_{i_j}^{(j-1)}=m_{j-1}$, we obtain $S_{i_j}^{(j)} = m_{j-1}+w_j$ and
+all other $S_i^{(j)}$ remain unchanged.  Thus $m_j\ge m_{j-1}$ and
+\[
+M_j = \max\{M_{j-1},\,m_{j-1}+w_j\}.
+\]
+If $M_{j-1}\ge m_{j-1}+w_j$, then $M_j=M_{j-1}$ and
+\[
+M_j - m_j \le M_{j-1}-m_{j-1} \le \frac1{P_0}.
+\]
+If $M_{j-1}< m_{j-1}+w_j$, then $M_j = m_{j-1}+w_j$ and
+\[
+M_j - m_j \le (m_{j-1}+w_j) - m_{j-1} = w_j \le \frac1{P_0}.
+\]
+In either case $M_j-m_j\le 1/P_0$, completing the induction and proving
+\eqref{eq:balance}.
+
+Let $m(x):=\min_i S_i(x)$.
+Since $H_{>P_0}(x) = \sum_{i=1}^t S_i(x) \ge t m(x)$, we have
+\[
+m(x) \le \frac{H_{>P_0}(x)}{t}.
+\]
+Combining this with \eqref{eq:balance} yields, for every $i$,
+\begin{equation}\label{eq:Si-lower}
+S_i(x) \;\ge\; m(x) \;\ge\; \frac{H_{>P_0}(x)}{t} - \frac1{P_0}.
+\end{equation}
+Using \eqref{eq:Hratio} and the fact that $P_0\ge t^2$, hence $1/P_0\le 1/t^2\to 0$,
+we deduce that
+\begin{equation}\label{eq:Si-limit}
+S_i(x) \;\ge\; \frac1\alpha + o(1)
+\qquad(N\to\infty),
+\end{equation}
+uniformly in $1\le i\le t$.
+
+By continuity of the logarithm, there exists $\delta>0$ such that
+\[
+\log\Bigl(\frac1\alpha - \delta\Bigr) \;\ge\; \log\frac1\alpha - \varepsilon.
+\]
+From \eqref{eq:Si-limit} we have $S_i(x)\ge \frac1\alpha -\delta$ for all
+$1\le i\le t$ and all sufficiently large $N$, and thus
+\begin{equation}\label{eq:Si-exp}
+\log S_i(x) \;\ge\; \log\frac1\alpha - \varepsilon
+\qquad(1\le i\le t)
+\end{equation}
+for all sufficiently large $N$.
+
+
+
+Define
+\[
+A_N := \Bigl\{\, n = p_1\cdots p_t :
+   p_i\in P_i\ \text{for }1\le i\le t\,\Bigr\}.
+\]
+Each $p_i$ is a prime $\le x$, so any $n\in A_N$ satisfies
+\[
+n \le x^t = N,
+\]
+and hence $A_N\subset\{1,\dots,N\}$.
+
+We claim that $A_N$ contains no triple $\{a,b,c\}$ of distinct elements with all
+pairwise least common multiples equal, so $A_N$ is admissible in the definition
+of $f_3(N)$.  Indeed, write
+\[
+a = \prod_{i=1}^t p_i^{(a)},\quad
+b = \prod_{i=1}^t p_i^{(b)},\quad
+c = \prod_{i=1}^t p_i^{(c)},
+\]
+where $p_i^{(\cdot)}\in P_i$ for each $i$.  For a fixed $i$, consider the primes
+from $P_i$ appearing in the pairwise least common multiples.  In
+$\operatorname{lcm}(a,b)$ the primes from $P_i$ form the set
+$\{p_i^{(a)},p_i^{(b)}\}$ (with multiplicities ignored), and similarly for
+$\operatorname{lcm}(a,c)$ and $\operatorname{lcm}(b,c)$ we obtain the sets
+$\{p_i^{(a)},p_i^{(c)}\}$ and $\{p_i^{(b)},p_i^{(c)}\}$ respectively.
+
+If
+\[
+\operatorname{lcm}(a,b)
+= \operatorname{lcm}(a,c)
+= \operatorname{lcm}(b,c),
+\]
+then for each $i$ these three sets of primes from $P_i$ must be equal:
+\[
+\{p_i^{(a)},p_i^{(b)}\}
+= \{p_i^{(a)},p_i^{(c)}\}
+= \{p_i^{(b)},p_i^{(c)}\}.
+\]
+A simple check shows that three two-element sets of the form
+$\{x,y\},\{x,z\},\{y,z\}$ can be equal only if $x=y=z$.  Thus
+$p_i^{(a)}=p_i^{(b)}=p_i^{(c)}$ for each $i$, and hence $a=b=c$, contradicting
+distinctness.  Therefore $A_N$ is admissible, and
+\[
+f_3(N) \;\ge\; \sum_{n\in A_N}\frac1n.
+\]
+
+
+
+We have
+\[
+\sum_{n\in A_N}\frac1n
+= \sum_{p_1\in P_1}\cdots\sum_{p_t\in P_t}
+  \frac{1}{p_1\cdots p_t}
+= \prod_{i=1}^t \sum_{p\in P_i}\frac1p
+= \prod_{i=1}^t S_i(x).
+\]
+Taking logarithms and using \eqref{eq:Si-exp}, we obtain, for all sufficiently
+large $N$,
+\[
+\log\Bigl(\sum_{n\in A_N}\frac1n\Bigr)
+= \sum_{i=1}^t \log S_i(x)
+\;\ge\; t\Bigl(\log\frac1\alpha - \varepsilon\Bigr).
+\]
+Recalling that $t=\alpha L + O(1)$ with $L=\log\log N$, we deduce
+\[
+\log\Bigl(\sum_{n\in A_N}\frac1n\Bigr)
+\;\ge\; (\alpha L + O(1))\Bigl(\log\frac1\alpha - \varepsilon\Bigr)
+= \bigl(\alpha\log\tfrac1\alpha - \alpha\varepsilon + o(1)\bigr)L
+\]
+as $N\to\infty$.  Hence, for all sufficiently large $N$,
+\[
+\sum_{n\in A_N}\frac1n
+\;\ge\;
+\exp\bigl((g(\alpha)-2\varepsilon)L\bigr)
+= (\log N)^{\,g(\alpha)-2\varepsilon}.
+\]
+
+Since $g(\alpha)-2\varepsilon>c$, we have
+\[
+(\log N)^{\,g(\alpha)-2\varepsilon}
+= (\log N)^c\,(\log N)^{\,g(\alpha)-2\varepsilon-c}
+\ge (\log N)^c
+\]
+for all sufficiently large $N$ (because $g(\alpha)-2\varepsilon-c>0$ is fixed).
+Thus there exists $N_0(c)$ such that for all $N\ge N_0(c)$,
+\[
+f_3(N) \;\ge\; \sum_{n\in A_N}\frac1n
+\;\gg_c\; (\log N)^c,
+\]
+where the implied constant may depend on $c$ but not on $N$.  This proves the theorem.
+\end{proof}
+
+
+
+
+\begin{thebibliography}{99}
+\bibitem{EP856}
+T. F. Bloom, Erdős Problem \#856, \url{https://www.erdosproblems.com/856}, accessed 2025-12-10.
+
+\bibitem{Er70}
+Erd\H{o}s, Paul, Some extremal problems in combinatorial number theory. Mathematical Essays Dedicated to A. J. Macintyre (1970), 123--133.
+
+\end{thebibliography}
+
+
+
+
+
+
+
+
+
+
+\newpage
+
+
+\appendix
+\section{Comments (15:18 on 09 Dec 2025)}\label{sec:comment1}
+For $k=3$ one can obtain a lower bound stronger than $\gg \log\log N$ from Bloom's comment (12:38 on 09 Dec 2025) by looking at products of two primes from different congruence classes.  Fix, for instance,\[
+P_1 := \{p \text{ prime} : p \equiv 1 \pmod 8\}, \qquad
+P_2 := \{q \text{ prime} : q \equiv 3 \pmod 8\},
+\]and for each $N$ set\[
+A_N := \{\, n = pq \le N : p \in P_1,\ q \in P_2 \,\}.
+\]I claim that $A_N$ contains no triple $\{a,b,c\}$ with all pairwise least common multiples equal.  Indeed, write\[
+a = p_1 q_1,\quad b=p_2 q_2,\quad c=p_3 q_3
+\]with $p_i\in P_1$ and $q_i\in P_2$.  In the prime factorization of $\operatorname{lcm}(a,b)$, the contribution from primes in $P_1$ is exactly the set $\{p_1,p_2\}$, and similarly for the other two lcm's we obtain the sets $\{p_1,p_3\}$ and $\{p_2,p_3\}$.  These three two-element sets can only be equal if $p_1=p_2=p_3$, and the same argument applied to the primes in $P_2$ forces $q_1=q_2=q_3$, hence $a=b=c$.  Thus $A_N$ is admissible for the definition of $f_3(N)$.
+Now
+\[
+f_3(N)\geq\sum_{n\in A_N}\frac1n
+= \sum_{\substack{p\in P_1\\ q\in P_2\\ pq\le N}} \frac1{pq}
+\ge \sum_{\substack{p\in P_1\\ p\le \sqrt N}} \frac1p
+     \sum_{\substack{q\in P_2\\ q\le N/p}} \frac1q.
+\]By Mertens' theorem in arithmetic progressions one has
+\[
+\sum_{\substack{p\le x\\ p\equiv a\ (\mathrm{mod}\ 8)}} \frac1p
+= \frac{1}{\varphi(8)}\log\log x + O(1)
+= \frac14\log\log x + O(1)
+\]for each residue class $a$ coprime to $8$.  In particular, there exists a constant $c_0>0$ and $x_0\ge 2$ such that, for all $x\ge x_0$ and all $a\in\{1,3,5,7\}$,
+\[
+\sum_{\substack{r\le x\\ r\equiv a\ (\mathrm{mod}\ 8)}} \frac1r
+\;\ge\; c_0 \log\log x.
+\]Assume $N$ is large enough that $\sqrt N \ge x_0$.  Then, for any prime $p\in P_1$ with $p\le \sqrt N$, we have $N/p \ge \sqrt N \ge x_0$, so
+\[
+\sum_{\substack{q\in P_2\\ q\le N/p}} \frac1q 
+\;\ge\; c_0 \log\log\!\Bigl(\frac{N}{p}\Bigr).
+\]
+Since $p\le\sqrt N$, we have $N/p \in [\sqrt N,\,N]$, and hence
+\[
+\log\log\!\Bigl(\frac{N}{p}\Bigr)
+\;\ge\; \log\log\sqrt N
+= \log\log N - \log 2.
+\]
+Thus, enlarging $N$ further if necessary, we may absorb the additive constant $\log 2$ into the implicit constant and obtain
+\[
+\sum_{\substack{q\in P_2\\ q\le N/p}} \frac1q \;\gg\; \log\log N
+\qquad\text{for all }p\in P_1\text{ with }p\le\sqrt N.
+\]Similarly, applying the same Mertens-type estimate with $x=\sqrt N$ and $a=1$ gives
+\[
+\sum_{\substack{p\in P_1\\ p\le \sqrt N}} \frac1p
+\;\ge\; c_0 \log\log\sqrt N
+= c_0(\log\log N - \log 2)
+\;\gg\; \log\log N
+\]
+for all sufficiently large $N$.  Combining these lower bounds, we deduce
+\[
+f_3(N)\;\geq\;\sum_{n\in A_N}\frac1n
+\;\gg\; (\log\log N)\cdot(\log\log N)
+\;=\; (\log\log N)^2.
+\]
+
+
+
+
+
+
+
+
+\section{Comments (15:30 on 09 Dec 2025)}\label{sec:comment2}
+
+I think the above construction extends in a straightforward way to give higher powers of $\log\log N$. Indeed, fix an integer $t\ge1$ and choose $t$ distinct residue classes $a_1,\dots,a_t \pmod q$ with $(a_i,q)=1$. For each $1\le i\le t$ let 
+\[
+P_i := \{p \text{ prime} : p \equiv a_i \pmod q\},
+\]and define
+\[
+A_N^{(t)} := \bigl\{\, n=p_1\cdots p_t \le N : p_i\in P_i\ (1\le i\le t) \,\bigr\}.
+\]By the same argument as in the case $t=2$, one checks that $A_N^{(t)}$ contains no triple $\{a,b,c\}$ with all pairwise least common multiples equal. Furthermore, using Mertens' theorem in arithmetic progressions in each of the $t$ sets $P_i$ and restricting to the box $p_i\le N^{1/t}$, one obtains
+\[
+\sum_{n\in A_N^{(t)}} \frac1n
+\;\ge\;
+\prod_{i=1}^t \sum_{\substack{p\in P_i\\ p\le N^{1/t}}} \frac1p
+\;\gg_t\; (\log\log N)^t
+\]for all sufficiently large $N$, where the implied constant depends only on $t$. Hence for every fixed $t$ there exists a constant $c_t>0$ such that
+\[
+f_3(N) \;\ge\; c_t (\log\log N)^t
+\]for all sufficiently large $N$.
+
+
+
+
+
+
+
+
+\section{Comments (08:19 on 10 Dec 2025)}\label{sec:comment3}
+
+
+Thanks to Bloom for the very helpful heuristic comment (17:24 on 09 Dec 2025). Motivated by his suggestion that choosing $t$ to be a small multiple of $\log\log N$ might lead to a power of $\log N$, one can in fact turn this into a completely rigorous construction.
+
+
+\begin{thm}
+There exist constants $c>0$ such that
+\[
+f_3(N) \gg_c (\log N)^c
+\]for all sufficiently large $N$.    
+\end{thm} 
+
+\begin{proof}
+Fix a real number $B>1$, and choose a small parameter $\gamma\in(0,B/2)$. Set
+\[
+B' := B+\gamma.
+\]Next choose a real number $P_0>0$ so large that for every prime $p\ge P_0$ we have
+\[
+\frac{1}{p} \le \gamma.
+\](This is possible since $1/p\to 0$ as $p\to\infty$.)
+
+We will work with primes $\ge P_0$, and we write
+\[
+H(x) := \sum_{p\le x}\frac{1}{p}
+\]for the usual harmonic sum over primes. By Mertens' theorem we have
+\[
+H(x) = \log\log x + O(1)
+\qquad(x\to\infty).
+\]Let us now choose a small constant \(\kappa := \frac{1}{16B'}\). For each large $N$ we set $L := \log\log N$, $t := \big\lfloor \kappa L \big\rfloor$, and define \(x := N^{1/t}\). For $N$ sufficiently large we have $t\ge 1$ and $x\to\infty$.
+
+First, we have
+\[
+\log\log x
+= \log\Bigl(\frac{\log N}{t}\Bigr)
+= \log\log N - \log t
+= L - \log t.
+\]Since $t=\kappa L+O(1)$, we have $\log t = \log L + O(1)$, so
+\[
+\log\log x
+= L - (\log L + O(1))
+\ge \frac{L}{2}
+\]for all sufficiently large $N$. Hence Mertens' theorem gives
+\[
+H(x)
+= \log\log x + O(1)
+\ge \frac{L}{2} - C_0
+\]for some constant $C_0$ and all large $N$.
+
+Let
+\[
+S_{\text{tot}}(x)
+:= \sum_{P_0 \le p\le x}\frac{1}{p}
+= H(x) - H(P_0^-),
+\]where $H(P_0^-)$ is a fixed constant depending only on $P_0$. Thus
+\[
+S_{\text{tot}}(x)
+\ge \frac{L}{2} - C_1
+\]for some constant $C_1$ and all large $N$. In particular, there exists $N_1$ such that for all $N\ge N_1$,
+\[
+S_{\text{tot}}(x) \;\ge\; \frac{L}{4}. \qquad \text{(eq:Stot-large)}
+\]On the other hand
+\[
+tB' \le (\kappa L)B' \le \frac{L}{16}
+\]for all large $N$, since $\kappa=1/(16B')$ and $t\le\kappa L$. Thus, by Eq. (eq:Stot-large), for all $N\ge N_1$ we have
+\[
+S_{\text{tot}}(x) \;\ge\; tB'. \qquad \text{(eq:Stot-vs-tBprime)}
+\]
+
+List the primes in $[P_0,x]$ in increasing order as
+\[
+q_1 < q_2 < \dots < q_M \le x.
+\]
+We will construct, by a greedy algorithm, disjoint subsets $P_1,\dots,P_k\subset\{q_1,\dots,q_M\}$, where $k\ge t$, such that each $P_i$ satisfies
+\[
+B \;\le\; \sum_{p\in P_i}\frac{1}{p} \;<\; B'. \qquad \text{(eq:Pi-bounds)}
+\]We proceed as follows. Set $P_1=\varnothing$ and $i=1$. Process the primes $q_1,q_2,\dots,q_M$ in order, adding $q_j$ to the current set $P_i$ as long as
+\[
+\sum_{p\in P_i}\frac{1}{p} < B.
+\]As soon as this sum first becomes $\ge B$, we stop filling $P_i$ and, if $i<t$, we start a new set $P_{i+1}$ from the next unused prime in the list. We continue in this way until either we have formed $t$ such sets or we have exhausted all primes in $[P_0,x]$.
+
+By construction, whenever a set $P_i$ is completed, its harmonic sum satisfies $\sum_{p\in P_i}1/p\ge B$, and since each added prime $p$ satisfies $p\ge P_0$ and hence $1/p\le\gamma$, we have
+\[
+\sum_{p\in P_i}\frac{1}{p} < B + \gamma = B'.
+\]
+Thus Eq. (eq:Pi-bounds) holds for every completed set $P_i$. 
+
+We now show that for $N\ge N_1$ the algorithm must produce at least $t$ such sets. Suppose instead that the process terminates after forming only $k<t$ completed sets $P_1,\dots,P_k$. There are two possibilities:
+Case 1: There is no unfinished set at termination. Then all primes in $[P_0,x]$ have been used to form the sets $P_1,\dots,P_k$, and
+\[
+S_{\text{tot}}(x)
+= \sum_{i=1}^k \sum_{p\in P_i}\frac{1}{p}.
+\]
+Using Eq. (eq:Pi-bounds), we obtain
+\[
+S_{\text{tot}}(x)
+< \sum_{i=1}^k B'
+= kB'
+\le (t-1)B' < tB'.
+\]Case 2: There is an unfinished $(k+1)$-st set at termination. In this case, after forming $P_1,\dots,P_k$, there remain some primes in $[P_0,x]$ which have been partially used to form a final set $P_{k+1}$ with
+\[
+\sum_{p\in P_{k+1}}\frac{1}{p} < B,
+\]since otherwise $P_{k+1}$ would also be a completed set. Let $P_{k+1}$ denote this (possibly empty) set of remaining primes. Then
+\[
+S_{\text{tot}}(x)
+= \sum_{i=1}^k \sum_{p\in P_i}\frac{1}{p}
+  + \sum_{p\in P_{k+1}}\frac{1}{p}.
+\]
+Using Eq. (eq:Pi-bounds) again, we obtain
+\[
+S_{\text{tot}}(x)
+< kB' + B
+\le kB' + B'
+= (k+1)B'
+\le tB'.
+\]In both cases we conclude that $S_{\text{tot}}(x) < tB'$, which contradicts Eq. (eq:Stot-vs-tBprime). Therefore, for every $N\ge N_1$ the greedy algorithm produces at least $t$ disjoint subsets $P_1,\dots,P_t$ of primes in $[P_0,x]$, each satisfying Eq. (eq:Pi-bounds).
+
+Now define
+\[
+A_N := \Bigl\{\, n = p_1\cdots p_t :
+   p_i\in P_i\ \text{for }1\le i\le t\,\Bigr\}.
+\]Since every prime in $P_i$ is $\le x$, any $n\in A_N$ satisfies
+\[
+n \le x^t = N,
+\]so $A_N\subset\{1,\dots,N\}$. Clearly, $A_N$ contains no triple $\{a,b,c\}$ of distinct elements with all pairwise least common multiples equal.
+
+
+Finally, we have
+\[
+\sum_{n\in A_N}\frac{1}{n}
+= \sum_{p_1\in P_1}\cdots\sum_{p_t\in P_t}\frac{1}{p_1\cdots p_t}
+= \prod_{i=1}^t \sum_{p\in P_i}\frac{1}{p}.
+\]By Eq. (eq:Pi-bounds), each factor satisfies
+\[
+\sum_{p\in P_i}\frac{1}{p} \;\ge\; B,
+\]so
+\[
+\sum_{n\in A_N}\frac{1}{n}
+\;\ge\; B^t.
+\]Since $A_N$ is admissible, this implies
+\[
+f_3(N) \;\ge\; B^t.
+\]Recalling that $t=\lfloor\kappa L\rfloor$ with $L=\log\log N$, we obtain
+\[
+B^t \;\ge\; B^{\kappa L - 1}
+= \exp\bigl( (\kappa L - 1)\log B \bigr)
+= (\log N)^{\kappa\log B}\, B^{-1}.
+\]Thus there exists $c:=\kappa\log B>0$ and a constant $C>0$ (depending only on $B,\gamma,P_0$) such that
+\[
+f_3(N) \;\ge\; C\,(\log N)^c
+\]for all sufficiently large $N$. Q.E.D.
+\end{proof}
+
+For example, if we let $B=2$ and $\gamma=\tfrac{1}{2}$ in the proof of Theorem 1, then $B' = B + \gamma = \frac{5}{2}$ and $\kappa = \frac{1}{16B'} = \frac{1}{40}$. Thus 
+\[
+f_3(N) \gg (\log N)^c, \qquad \text{where } c = \frac{1}{40}\log 2 > 0.017.
+\]Of course, with a more refined construction one can improve this value of $c$, but it seems that this method can at best yield exponents in the range $0 < c < 1/e$.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\end{document}
