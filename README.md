@@ -16,8 +16,7 @@ them up as a short PDF that could be linked from the discussion.
 The repository contains the following files:
 
 - **A_note_on_Erdos_Problem_856.pdf**  
-  A complete write-up of several constructions related to the harmonic-extremal 
-  function $f_3(N)$.
+  A complete write-up of several constructions related to $f_3(N)$.
 
 - **A_note_on_Erdos_Problem_856.tex**  
   The full LaTeX source of the note, so that others may edit, adapt, or verify 
