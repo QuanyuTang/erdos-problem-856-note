@@ -9,8 +9,6 @@ In the comment section, Bloom suggested that my long proofs were difficult to
 read when split across several nested replies, and encouraged me to write 
 them up as a short PDF that could be linked from the discussion.
 
-This repository collects that material in a clean and permanent form.
-
 ---
 
 ## Contents
